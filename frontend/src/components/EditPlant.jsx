@@ -18,6 +18,7 @@ import axios from "axios";
 import { converIntoDataUrl } from "@/lib/utils";
 import RichTextEditor from "./RichTextEditor";
 import { toast } from "sonner";
+import { Flag } from "lucide-react";
 
 const EditPlant = () => {
   let isLoading = false
@@ -50,12 +51,15 @@ const EditPlant = () => {
 
   const editPlantHandler = async () => {
     try {
+      console.log(input.description)
+      let desc = true
+      if(input.description === "<p>No description provided.</p>") desc = false
       isLoading = true
       const formData = new FormData();
       formData.append("name", input.name || edit.name);
       formData.append("price", input.price || edit.price);
       formData.append("category", input.category || edit.category);
-      formData.append("description", input.description)
+      if(desc) formData.append("description", input.description)
       if (input.image) formData.append("image", input.image);
 
       const res = await axios.post(
@@ -67,14 +71,7 @@ const EditPlant = () => {
         }
       );
 
-      // const res = await axios.post(
-      //   `https://plant-2yxz.onrender.com/api/v1/plant/${edit.id}/edit`,
-      //   formData,
-      //   {
-      //     headers: { "Content-Type": "multipart/form-data" },
-      //     withCredentials: true,
-      //   }
-      // );
+     
 
       if (res.data.success) {
         const updatedPlants = plants.filter((plant) => plant._id !== edit.id);

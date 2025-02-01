@@ -42,7 +42,8 @@ const Header = () => {
 
   const adminUser =
     user._id === "675afce82ad692851f6f3d57" ||
-    user._id === "6761685d920ef8a8bf6e6607";
+    user._id === "6761685d920ef8a8bf6e6607" ||
+    user._id === "6733270d0a7385d0eed97cb1"
 
   // console.log(adminUser)
 
