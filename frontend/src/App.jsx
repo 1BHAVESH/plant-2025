@@ -23,6 +23,7 @@ import Admin from './components/Admin'
 import TrendingPage from './components/TrendingPage'
 import SectionPage from './components/SectionPage'
 import TotalEarnings from './components/ordersandearnigs/TotalEarnings'
+import { ProctedRoute } from './components/ui/protectedRoute'
 
 const browserRouter = createBrowserRouter([
 
@@ -36,7 +37,7 @@ const browserRouter = createBrowserRouter([
       },
       {
         path: "/plant/:id",
-        element: <ProductDetails />
+        element: <ProctedRoute><ProductDetails /></ProctedRoute>
       },
       {
         path: "/new_plant",

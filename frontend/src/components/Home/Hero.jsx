@@ -1,7 +1,6 @@
 import React from "react";
 import Header from "../Header";
 import ProductCard from "./ProductCard";
-import { FaMinus } from "react-icons/fa";
 import AnimationSVG from "../../components/AnimationSvg.jsx";
 import { MdOutlineArrowRightAlt } from "react-icons/md";
 import { useGetAllPlants } from "@/hook/useGetAllPlants";
@@ -9,16 +8,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { setOwnPlansts } from "@/redux/ownPlantSlice";
 import { setOrder } from "@/redux/ordersSlice";
 import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 
 const Hero = () => {
+  const naviagte = useNavigate()
   const token = Cookies.get("token");
-  console.log(token);
   const dispatch = useDispatch();
   useGetAllPlants();
   const { plants } = useSelector((store) => store.plants);
   const { user } = useSelector((store) => store.user);
-
-  // console.log(plants);
 
   dispatch(setOrder(false));
   dispatch(setOwnPlansts([]));
@@ -39,7 +37,7 @@ const Hero = () => {
         {/* Content Column */}
         <div className="hero md:w-1/2 mt-5 md:mt-0 ml-10 border-l-8 border-l-yellow-500 flex flex-col justify-center p-4 text-center md:text-left space-y-6">
           <h2 className="text-2xl font-semibold text-black flex items-center justify-center md:justify-start">
-            Welcome &nbsp;<span class="usern">{user?.name}!</span>
+            Welcome &nbsp;<span className="usern">{user?.name}!</span>
           </h2>
           <h1 className="text-6xl md:text-7xl font-extrabold text-green-800 flex items-center justify-center md:justify-start space-x-4">
             <span>THE PLANTER</span>
@@ -65,13 +63,32 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* <div className="flex justify-center mt-4 text-xl gap-4">
-        <p className="bg-gray-300 p-2 cursor-pointer rounded-sm">flowers</p>
-        <p className="bg-gray-300 p-2 cursor-pointer rounded-sm">flowers</p>        
-        <p className="bg-gray-300 p-2 cursor-pointer rounded-sm">flowers</p>
-      </div> */}
-
-      {/* Best Plants Section */}
+      {/* Rolling Plants Section */}
+      <div className="overflow-hidden mt-10">
+        <div className="flex animate-scroll gap-10 max-w-7xl mx-auto">
+          {plants &&
+            plants.map((plant, index) => (
+              <img
+                onClick={() => naviagte(`/plant/${plant._id}`)}
+                key={index}
+                src={plant.image}
+                alt={plant.pname}
+                className="w-40 h-40 object-cover cursor-pointer rounded-full shadow-lg"
+              />
+            ))}
+          {/* Repeat for seamless scrolling */}
+          {plants &&
+            plants.map((plant, index) => (
+              <img
+              onClick={() => naviagte(`/plant/${plant._id}`)}
+                key={index + "repeat"}
+                src={plant.image}
+                alt={plant.pname}
+                className="w-40 h-40 object-cover rounded-full shadow-lg"
+              />
+            ))}
+        </div>
+      </div>
       <div className="flex justify-center text-4xl font-serif text-black mt-8 mb-2">
         <h1 className="font-dancing-script  text-4xl">Our Best Bouquet</h1>
       </div>
@@ -99,8 +116,6 @@ const Hero = () => {
             );
           })}
       </div>
-
-      {/* Additional Best Plants Section with Different Background Color */}
       <div className="flex flex-col items-center my-8 bg-emerald-100 text-green-800 p-8 w-screen">
         <h1 className="text-4xl font-dancing-script font-bold">
           Our Best Plants
@@ -160,22 +175,3 @@ const Hero = () => {
 };
 
 export default Hero;
-
-// useEffect(() => {
-//   // Using try-catch inside the useEffect function
-//   const fetchPlants = async () => {
-//     try {
-//       const response = await axios.get(
-//         "https://perenual.com/api/species-list?key=sk-b6pl672f4a25703597575&indoor=1"
-//       );
-//       console.log(response.data.data[21].default_image.original_url);
-//       setImage(response.data.data[21].default_image.original_url);
-//       console.log(response.data.data);
-//       setPlantss(response.data.data);
-//     } catch (error) {
-//       console.error("Error fetching plants:", error);
-//     }
-//   };
-
-//   fetchPlants();
-// }, []); // Empty dependency array to run effect once after component mounts

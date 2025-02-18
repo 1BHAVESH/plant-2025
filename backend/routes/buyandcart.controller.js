@@ -9,7 +9,7 @@ const router = express.Router();
 
 router.route("/:id/add_to_cart").get(isAuthnticated, getCart)
 router.route("/:id/remove_from_cart").get(isAuthnticated, removeFromCart)
-router.route("/:id/plant_buy").get(isAuthnticated, buyPlant)
+router.route("/:id/plant_buy").post(isAuthnticated, buyPlant)
 router.route("/:id/cancel_order").get(isAuthnticated, cancelOrder)
 
 export default router; 

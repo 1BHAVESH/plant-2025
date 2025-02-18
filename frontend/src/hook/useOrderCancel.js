@@ -2,6 +2,7 @@ import { setOrders } from "@/redux/ordersSlice"
 import { setUser } from "@/redux/userSlice"
 import axios from "axios"
 import { useDispatch } from "react-redux"
+import { toast } from "sonner"
 
 export  const useOrderCancel = (id, orderID) => {
 
@@ -29,6 +30,11 @@ export  const useOrderCancel = (id, orderID) => {
         
        } catch (error) {
         console.log(error)
+        if(error.response.data.message === "User Not Autherzied"){
+            toast.error("First you Must be logged in", {
+                position: "top-center"
+            })
+        }
        }
    }
 

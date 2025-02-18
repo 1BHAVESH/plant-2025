@@ -3,6 +3,7 @@ import { setUser } from "../redux/userSlice.js";
 import axios from "axios";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { toast } from "sonner";
 
 export const useAddToCart = (id) => {
 
@@ -28,6 +29,11 @@ export const useAddToCart = (id) => {
            
         } catch (error) {
             console.log(error);
+            if(error.response.data.message === "User Not Autherzied"){
+                toast.error("First you Must be logged in", {
+                    position: "top-center"
+                })
+            }
         }
     };
 

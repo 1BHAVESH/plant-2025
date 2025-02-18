@@ -40,7 +40,7 @@ const ProductCard = ({
 
   const { cart } = useSelector((store) => store.cart);
 
-  const isCart = user.cart.some((item) => item?._id === id);
+  const isCart = user?.cart?.some((item) => item?._id === id);
 
   const isCarta = cart.some((item) => item?._id === id);
 

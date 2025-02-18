@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useplantData } from "../hook/usePlantDetails";
 import Header from "./Header";
 import { useBuyPlant } from "@/hook/useBuyPlant";
 import { useAddToCart } from "@/hook/useAddToCart";
 import { useRemoveFromCart } from "@/hook/useRemoveFromCart";
 import Cookies from "js-cookie";
+import { setPlantQuentity } from "@/redux/productDetailSlice";
 
 const ProductDetails = () => {
   const token = Cookies.get("token");
@@ -16,16 +17,21 @@ const ProductDetails = () => {
 
   useplantData(params.id);
   const { user } = useSelector((store) => store.user);
+  const [quantity, setQuantity] = useState(1);
+
+  const dispatch = useDispatch()
+
+  dispatch(setPlantQuentity(quantity))
+
   const plant = useSelector((store) => store.plantInfo.plant);
   const { cart } = useSelector((store) => store.cart);
 
   const isInCart = cart.some((item) => item?._id === plant?._id);
 
-  const { buyPlant } = useBuyPlant(plant?._id);
+  const { buyPlant } = useBuyPlant(plant?._id, quantity);
   const { addToCart } = useAddToCart(plant?._id);
   const { removeFromCart } = useRemoveFromCart(plant?._id);
 
-  const [quantity, setQuantity] = useState(1);
 
   const handleBuy = () => navigate("/payment");
   const handleAddToCart = () => addToCart(quantity);
@@ -58,9 +64,10 @@ const ProductDetails = () => {
             <input
               type="number"
               value={quantity}
-              onChange={(e) => setQuantity(Math.max(1, e.target.value))}
+              onChange={(e) => setQuantity(Math.min(4, Math.max(1, e.target.value)))}
               className="w-16 px-2 py-1 border rounded text-center"
               min="1"
+              max="4"
             />
           </div>
 

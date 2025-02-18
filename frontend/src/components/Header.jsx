@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { CiShoppingCart, CiUser } from "react-icons/ci";
 import { Link, useNavigate } from "react-router-dom";
@@ -32,6 +32,8 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import axios from "axios";
+import { setLogout, setUser } from "@/redux/userSlice";
 const Header = () => {
   const [activePage, setActivePage] = useState("home");
   const { orders } = useSelector((store) => store.orders);
@@ -41,9 +43,9 @@ const Header = () => {
   const { cart } = useSelector((store) => store.cart);
 
   const adminUser =
-    user._id === "675afce82ad692851f6f3d57" ||
-    user._id === "6761685d920ef8a8bf6e6607" ||
-    user._id === "6733270d0a7385d0eed97cb1"
+    user?._id === "675afce82ad692851f6f3d57" ||
+    user?._id === "6761685d920ef8a8bf6e6607" ||
+    user?._id === "6733270d0a7385d0eed97cb1"
 
   // console.log(adminUser)
 
@@ -61,7 +63,11 @@ const Header = () => {
 
   const pageHnadler = (page) => {
 
+    console.log("00000",page,"00000")
+
     setActivePage(page);
+
+    console.log("*****",activePage,"*****")
 
     if (page == "home") {
      
@@ -86,6 +92,26 @@ const Header = () => {
       navigate("/outdoor-plant");
     }
   };
+
+  const logoutHandler = async () => {
+    try {
+
+      const res = await axios.get("http://localhost:3001/api/v1/users/logout", {
+        withCredentials: true,
+      })
+
+      if(res.data.success){
+        dispatch(setLogout())
+       
+        navigate("/login")
+      }
+      
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  
 
   return (
     <div className="sticky">
@@ -150,7 +176,7 @@ const Header = () => {
               <PopoverContent>
                 <div>
                   {cart.map((plant) => (
-                    <div key={plant._id}>
+                    <div key={plant?._id}>
                       <Link className='cart' to={`/plant/${plant._id}`} >
                       <div
                         className="flex cursor-pointer items-center my-2.5 gap-2.5 "
@@ -163,6 +189,7 @@ const Header = () => {
                         <p className="text-sm">
                           <span className="font-bold">{plant?.pname}</span>
                         </p>
+                        <p>{plant?.price}</p>
                       </div>
                     </Link>
                     </div>
@@ -195,7 +222,7 @@ const Header = () => {
                   <DropdownMenuItem>
                     <LogOutIcon />
                     <span>
-                      <Link to="/login">Logout</Link>
+                      <p onClick={logoutHandler}>Logout</p>
                     </span>
                   </DropdownMenuItem>
 

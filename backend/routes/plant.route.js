@@ -13,7 +13,7 @@ const router = express.Router();
 router.route("/create_plant").post(isAuthnticated,  upload.single("image"), createPlantPost);
 router.route("/:id/edit").post(isAuthnticated, upload.single("image"), editPlant)
 router.route("/:id/delete").delete(isAuthnticated, deletePost)
-router.route("/plants").get(isAuthnticated, showPlants)
+router.route("/plants").get(showPlants)
 router.route("/:id/plant_detail").get( getPlantDetail)
 router.route("/my_plants").get(isAuthnticated, usersOwnPlants)
 
